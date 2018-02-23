@@ -2,21 +2,9 @@
 
 #include "math.h"
 #include <stdint.h>
-typedef int8_t 		i8;
-typedef int16_t 	i16;
-typedef int32_t 	i32;
-typedef int64_t		i64;
-typedef i32			b32;
+#include <stdlib.h>
 
-typedef uint8_t 	u8;
-typedef uint16_t 	u16;
-typedef uint32_t	u32;
-typedef uint64_t 	u64;
-
-typedef size_t memory_index;
-
-typedef float r32;
-typedef double r64;
+#include "amp_def.h"
 
 const r32 PI = 3.14159265359f;
 
@@ -33,7 +21,30 @@ extern "C"
             r32 y;
         };
         
+        struct
+        {
+            r32 u;
+            r32 v;
+        };
+
         r32 E[2];
+    };
+
+    union v2i
+    {
+        struct
+        {
+            i32 x;
+            i32 y;
+        };
+
+        struct
+        {
+            i32 u;
+            i32 v;
+        };
+
+        i32 E[2];
     };
 }
 
@@ -41,6 +52,13 @@ inline v2
 V2(r32 X, r32 Y)
 {
     v2 Result = {X, Y};
+    return Result;
+}
+
+inline v2i
+V2i(i32 X, i32 Y)
+{
+    v2i Result = { X, Y };
     return Result;
 }
 
@@ -161,16 +179,63 @@ extern "C"
         
         struct
         {
+            r32 u;
+            r32 v;
+            r32 w;
+        };
+
+        struct
+        {
             v2 XY;
             r32 _IgnoredZ;
         };
         r32 E[3];
     };
+
+    union v3i
+    {
+        struct
+        {
+            i32 x;
+            i32 y;
+            i32 z;
+        };
+
+        struct
+        {
+            i32 r;
+            i32 g;
+            i32 b;
+        };
+
+        struct
+        {
+            i32 u;
+            i32 v;
+            i32 w;
+        };
+
+        struct
+        {
+            v2i XY;
+            i32 _IgnoredZ;
+        };
+        i32 E[3];
+    };
 }
+
 inline v3
 V3(r32 X, r32 Y, r32 Z)
 {
     v3 Result = {X, Y, Z};
+
+    return Result;
+}
+
+inline v3i
+V3i(i32 X, i32 Y, i32 Z)
+{
+    v3i Result = { X, Y, Z };
 
     return Result;
 }
