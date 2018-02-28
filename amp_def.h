@@ -26,3 +26,5 @@ typedef double r64;
 #define internal static
 #define local_persist static
 #define global_variable static
+
+#define ARRAY_COUNT(x) (sizeof(x) / sizeof(x[0]))

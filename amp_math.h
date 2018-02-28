@@ -2,21 +2,11 @@
 
 #include "math.h"
 #include <stdint.h>
-typedef int8_t 		i8;
-typedef int16_t 	i16;
-typedef int32_t 	i32;
-typedef int64_t		i64;
-typedef i32			b32;
+#include <stdlib.h>
 
-typedef uint8_t 	u8;
-typedef uint16_t 	u16;
-typedef uint32_t	u32;
-typedef uint64_t 	u64;
+#include <time.h>
 
-typedef size_t memory_index;
-
-typedef float r32;
-typedef double r64;
+#include "amp_def.h"
 
 const r32 PI = 3.14159265359f;
 
@@ -33,7 +23,30 @@ extern "C"
             r32 y;
         };
         
+        struct
+        {
+            r32 u;
+            r32 v;
+        };
+
         r32 E[2];
+    };
+
+    union v2i
+    {
+        struct
+        {
+            i32 x;
+            i32 y;
+        };
+
+        struct
+        {
+            i32 u;
+            i32 v;
+        };
+
+        i32 E[2];
     };
 }
 
@@ -41,6 +54,13 @@ inline v2
 V2(r32 X, r32 Y)
 {
     v2 Result = {X, Y};
+    return Result;
+}
+
+inline v2i
+V2i(i32 X, i32 Y)
+{
+    v2i Result = { X, Y };
     return Result;
 }
 
@@ -112,6 +132,15 @@ operator-=(v2 &A, v2 B)
     return A;
 }
 
+inline v2
+operator/=(v2 &A, r32 B)
+{
+    A.x /= B;
+    A.y /= B;
+
+    return A;
+}
+
 inline r32
 Dot(v2 A, v2 B)
 {
@@ -161,16 +190,63 @@ extern "C"
         
         struct
         {
+            r32 u;
+            r32 v;
+            r32 w;
+        };
+
+        struct
+        {
             v2 XY;
             r32 _IgnoredZ;
         };
         r32 E[3];
     };
+
+    union v3i
+    {
+        struct
+        {
+            i32 x;
+            i32 y;
+            i32 z;
+        };
+
+        struct
+        {
+            i32 r;
+            i32 g;
+            i32 b;
+        };
+
+        struct
+        {
+            i32 u;
+            i32 v;
+            i32 w;
+        };
+
+        struct
+        {
+            v2i XY;
+            i32 _IgnoredZ;
+        };
+        i32 E[3];
+    };
 }
+
 inline v3
 V3(r32 X, r32 Y, r32 Z)
 {
     v3 Result = {X, Y, Z};
+
+    return Result;
+}
+
+inline v3i
+V3i(i32 X, i32 Y, i32 Z)
+{
+    v3i Result = { X, Y, Z };
 
     return Result;
 }
@@ -211,6 +287,16 @@ inline v3
 operator-=(v3 &A, v3 B)
 {
     A = A - B;
+
+    return A;
+}
+
+inline v3
+operator/=(v3 &A, r32 B)
+{
+    A.x /= B;
+    A.y /= B;
+    A.z /= B;
 
     return A;
 }
@@ -302,6 +388,17 @@ Normalize(v3 V)
     return Result;
 }
 
+inline v3
+Hadamard(v3 V, v3 N)
+{
+    v3 Result = V;
+    Result.x *= N.x;
+    Result.y *= N.y;
+    Result.z *= N.z;
+
+    return Result;
+}
+
 /*-------------------------------------------------------------------------
     4d Vector
 -------------------------------------------------------------------------*/
@@ -367,6 +464,17 @@ inline v4
 operator-=(v4 &A, v4 B)
 {
     A = A - B;
+
+    return A;
+}
+
+inline v4
+operator/=(v4 &A, r32 B)
+{
+    A.x /= B;
+    A.y /= B;
+    A.z /= B;
+    A.w /= B;
 
     return A;
 }
@@ -823,5 +931,33 @@ RandomRealInRange(r32 Floor, r32 Ceil)
 {
     r32 Result = Floor + RandomReal()*(Ceil - Floor);
     
+    return Result;
+}
+
+inline void
+SeedRand()
+{
+    srand(time(NULL));
+}
+
+inline v3
+RandomVecInUnitSphere()
+{
+    v3 Pos;
+    v3 OneVec = V3(1.0, 1.0, 1.0);
+    do
+    {
+        Pos = 2.0*V3(RandomRealInRange(0.0, 1.0),
+            RandomRealInRange(0.0, 1.0),
+            RandomRealInRange(0.0, 1.0)) - OneVec;
+    } while (LengthSquared(Pos) >= 1.0);
+    return Pos;
+}
+
+inline v3
+Reflect(v3 Vec, v3 Normal)
+{
+    v3 Result = Vec - 2 * Inner(Vec, Normal)*Normal;
+
     return Result;
 }
