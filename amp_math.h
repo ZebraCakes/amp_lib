@@ -4,11 +4,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-<<<<<<< HEAD
 #include <time.h>
 
-=======
->>>>>>> d910bac880c96899a6d5aa3b8ff8c54510b89cd3
 #include "amp_def.h"
 
 const r32 PI = 3.14159265359f;
