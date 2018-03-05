@@ -341,6 +341,14 @@ operator/(v3 Vec, r32 Scalar)
     return Result;
 }
 
+inline v3
+operator-(v3 Vec)
+{
+    v3 Result = { -Vec.x, -Vec.y, -Vec.z };
+
+    return Result;
+}
+
 inline r32
 Dot(v3 A, v3 B)
 {
