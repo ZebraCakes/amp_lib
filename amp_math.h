@@ -942,6 +942,14 @@ RandomRealInRange(r32 Floor, r32 Ceil)
     return Result;
 }
 
+inline r32
+RandomCanonical()
+{
+    r32 Result = RandomRealInRange(0.0, 1.0);
+
+    return Result;
+}
+
 inline void
 SeedRand()
 {
