@@ -28,3 +28,9 @@ typedef double r64;
 #define global_variable static
 
 #define ARRAY_COUNT(x) (sizeof(x) / sizeof(x[0]))
+
+#if DEBUG
+#define ASSERT(expression) if(!(expression)) *(int*)0 = 0;
+#else
+#define ASSERT(expression)
+#endif
