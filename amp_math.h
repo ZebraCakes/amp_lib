@@ -923,6 +923,17 @@ struct rectangle3
     v3 Max;
 };
 
+typedef rectangle2 rect2;
+typedef rectangle3 rect3;
+
+inline rectangle3
+Rectangle3(v3 Min, v3 Max)
+{
+    rectangle3 Result = {Min, Max};
+
+    return Result;
+}
+
 /*-------------------------------------------------------------------------
                            General Math Routines
 -------------------------------------------------------------------------*/
